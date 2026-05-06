@@ -31,11 +31,12 @@ const App = (()=>{
 
   function pickExercise() {
     const tense = document.getElementById("sel-tense").value;
-    let pool = T.filter(t => {
+    const sourcePool = T_TENSES[tense] || T;
+    let pool = sourcePool.filter(t => {
       if (tense==="imperativo" && t.pronoun==="yo") return false;
       return conjugate(t.verb, t.pronoun, tense) !== null;
     });
-    if (!pool.length) pool = T;
+    if (!pool.length) pool = sourcePool;
 
     const recent = history.slice(-6);
     const fresh = pool.filter(t => !recent.includes(t.verb+"_"+t.pronoun));
