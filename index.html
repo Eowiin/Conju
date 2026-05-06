@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Conju</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body>
+<div class="lang-dropdown" id="lang-dropdown">
+  <button class="lang-current" id="lang-current">🇫🇷 FR</button>
+  <ul class="lang-menu" id="lang-menu">
+    <li><button class="lang-option active" data-lang="fr">🇫🇷 FR</button></li>
+    <li><button class="lang-option" data-lang="en">🇬🇧 EN</button></li>
+    <li><button class="lang-option" data-lang="pt">🇧🇷 PT</button></li>
+  </ul>
+</div>
+<header>
+  <h1><em>Conju</em></h1>
+  <p id="subtitle">Entraîneur de conjugaison espagnole</p>
+</header>
+<div class="container">
+  <div class="controls">
+    <div class="cg">
+      <label for="sel-tense" data-i18n="labelTense">Temps verbal</label>
+      <select id="sel-tense">
+        <option value="presente">Présent de l'indicatif</option>
+        <option value="indefinido">Prétérit indéfini</option>
+        <option value="imperfecto">Imparfait</option>
+        <option value="perfecto">Prétérit parfait (he/has…)</option>
+        <option value="pluscuamperfecto">Plus-que-parfait</option>
+        <option value="futuro">Futur simple</option>
+        <option value="futuro_perifrastico">Futur périphrastique (voy a…)</option>
+        <option value="condicional">Conditionnel présent</option>
+        <option value="subjuntivo">Subjonctif présent</option>
+        <option value="subjuntivo_imperfecto">Subjonctif imparfait</option>
+        <option value="imperativo">Impératif</option>
+      </select>
+    </div>
+  </div>
+  <div class="score-bar">
+    <span>Score : <strong id="score-display">0 / 0</strong></span>
+    <span id="streak-display"></span>
+    <button class="sr" id="btn-reset" type="button">Réinitialiser</button>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="tense-badge" id="tense-badge">Présent de l'indicatif</div>
+      <button class="btn-refresh" id="btn-next" type="button" title="Nouvelle phrase">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 8A5.5 5.5 0 1 1 10 3.07"/><polyline points="10 1 10 4 13 4"/></svg>
+        <span id="btn-next-label">Nouvelle phrase</span>
+      </button>
+    </div>
+    <div class="sentence" id="sentence-display"></div>
+    <div class="hint-row" id="hint-row"></div>
+    <div class="translation" id="translation-display"></div>
+  </div>
+  <div class="answer-area">
+    <input type="text" id="answer-input" placeholder="Conjuguez le verbe…"
+      autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+    <button class="primary" id="btn-check" type="button">Vérifier</button>
+  </div>
+  <div id="feedback"></div>
+</div>
+<script src="js/i18n.js" defer></script>
+<script src="js/verbs.js" defer></script>
+<script src="js/conjugation.js" defer></script>
+<script src="js/templates.js" defer></script>
+<script src="js/app.js" defer></script>
+</body>
+</html>
