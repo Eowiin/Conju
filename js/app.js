@@ -60,7 +60,7 @@ const App = (()=>{
       (isCompound ? `<div class="pill" style="color:var(--accent)">${l.fullForm}</div>` : "");
     document.getElementById("translation-display").textContent = "→ " + getLangTr(c);
     const inp = document.getElementById("answer-input");
-    inp.value=""; inp.className=""; inp.disabled=false;
+    inp.value=""; inp.className=""; inp.disabled=false; inp.readOnly=false;
     inp.placeholder = l.placeholder;
     document.getElementById("btn-check").textContent = l.verify;
     document.getElementById("btn-check").disabled=false;
@@ -83,7 +83,8 @@ const App = (()=>{
     if (ok) { score++; streak++; } else { streak=0; }
     updateScore();
     const inp = document.getElementById("answer-input");
-    inp.className = ok?"correct":"wrong"; inp.disabled=true;
+    inp.className = ok?"correct":"wrong"; inp.readOnly=true;
+    inp.focus();
 
     const rule = getRule(c.verb, c.tense, lang);
     let tableHtml = "";
@@ -140,7 +141,10 @@ const App = (()=>{
     });
     document.addEventListener("click", () => dropdown.classList.remove("open"));
     document.getElementById("answer-input").addEventListener("keydown", event => {
-      if (event.key === "Enter") check();
+      if (event.key === "Enter") {
+        event.preventDefault();
+        check();
+      }
     });
   }
 
