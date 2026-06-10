@@ -28,10 +28,26 @@ function getParticiple(verb) {
 // Auxiliaire haber conjugué au présent (pour parfait) et à l'imperfecto (pour plus-que-parfait)
 const HABER_PRES = {yo:"he",tú:"has",él:"ha",nosotros:"hemos",vosotros:"habéis",ellos:"han"};
 const HABER_IMP  = {yo:"había",tú:"habías",él:"había",nosotros:"habíamos",vosotros:"habíais",ellos:"habían"};
+const HABER_FUT  = {yo:"habré",tú:"habrás",él:"habrá",nosotros:"habremos",vosotros:"habréis",ellos:"habrán"};
+const HABER_COND = {yo:"habría",tú:"habrías",él:"habría",nosotros:"habríamos",vosotros:"habríais",ellos:"habrían"};
+
+function getGerund(verbName) {
+  const verb = V[verbName];
+  if (!verb) return null;
+  if (verb.gerundio) return verb.gerundio;
+  const stem = verbName.slice(0, -2);
+  if (verb.type === "ar") return stem + "ando";
+  const vowels = "aeiouáéíóú";
+  if (vowels.includes(stem.slice(-1))) return stem + "yendo";
+  return stem + "iendo";
+}
 
 function conjugate(verbName, pronoun, tense) {
   const verb = V[verbName];
   if (!verb) return null;
+
+  // Gérondif (forme invariable)
+  if (tense === "gerundio") return getGerund(verbName);
 
   // Temps composés
   if (tense === "perfecto") {
@@ -45,6 +61,9 @@ function conjugate(verbName, pronoun, tense) {
     const ir_pres = {yo:"voy",tú:"vas",él:"va",nosotros:"vamos",vosotros:"vais",ellos:"van"};
     return ir_pres[pronoun] + " a " + verbName;
   }
+  // Futur antérieur et conditionnel passé
+  if (tense === "futuro_perfecto")     return HABER_FUT[pronoun]  + " " + getParticiple(verbName);
+  if (tense === "condicional_compuesto") return HABER_COND[pronoun] + " " + getParticiple(verbName);
 
   // Cherche la forme irrégulière déclarée
   if (verb[tense] && verb[tense][pronoun] !== undefined) return verb[tense][pronoun];
@@ -80,10 +99,13 @@ function getFullConjugation(verbName, tense) {
 // Règles / explications par temps
 const RULES = {
   fr: {
-    perfecto:           "Prétérit parfait : haber (présent) + participe passé. Participe : -ar → -ado, -er/-ir → -ido. Irréguliers courants : hecho, dicho, visto, vuelto, puesto, escrito, abierto, muerto.",
-    pluscuamperfecto:   "Plus-que-parfait : haber (imparfait) + participe passé. Même formation que le parfait mais avec había/habías/había…",
-    futuro_perifrastico:"Futur périphrastique : ir (présent) + a + infinitif. Équivalent de 'aller + infinitif' en français. Très courant à l'oral.",
-    imperativo:         "Impératif affirmatif : tú → 3ᵉ pers. présent (-ar: habla, -er: come, -ir: vive). Nosotros/ellos = subjonctif présent. Vosotros : -ar/-er/-ir → -ad/-ed/-id. Irréguliers tú : di, haz, ve, pon, sal, sé, ten, ven.",
+    perfecto:              "Passé composé : haber (présent) + participe passé. Participe : -ar → -ado, -er/-ir → -ido. Irréguliers courants : hecho, dicho, visto, vuelto, puesto, escrito, abierto, muerto.",
+    pluscuamperfecto:      "Plus-que-parfait : haber (imparfait) + participe passé. Même formation que le passé composé mais avec había/habías/había…",
+    futuro_perifrastico:   "Futur périphrastique : ir (présent) + a + infinitif. Équivalent de 'aller + infinitif' en français. Très courant à l'oral.",
+    futuro_perfecto:       "Futur antérieur : haber (futur) + participe passé. Habré/habrás/habrá/habremos/habréis/habrán + participe. Exprime une action achevée avant un moment futur.",
+    condicional_compuesto: "Conditionnel passé : haber (cond.) + participe passé. Habría/habrías/habría/habríamos/habríais/habrían + participe. Exprime une action irréelle ou hypothétique passée.",
+    gerundio:              "Gérondif : -ar → radical + -ando ; -er/-ir → radical + -iendo. Si le radical finit par une voyelle : -yendo (leyendo, oyendo). Alternances : e→i (pidiendo, diciendo), o→u (durmiendo, pudiendo).",
+    imperativo:            "Impératif affirmatif : tú → 3ᵉ pers. présent (-ar: habla, -er: come, -ir: vive). Nosotros/ellos = subjonctif présent. Vosotros : -ar/-er/-ir → -ad/-ed/-id. Irréguliers tú : di, haz, ve, pon, sal, sé, ten, ven.",
     fullyIrr:           "Verbe entièrement irrégulier — toutes les formes sont à mémoriser.",
     goYo:               "Irrégulier en -go uniquement à la 1ʳᵉ personne (yo). Les autres personnes suivent la conjugaison régulière.",
     zco:                "Verbes en -cer/-cir : yo → -zco. Toutes les autres personnes sont régulières.",
@@ -104,10 +126,13 @@ const RULES = {
     },
   },
   en: {
-    perfecto:           "Present perfect: haber (present) + past participle. Participle: -ar → -ado, -er/-ir → -ido. Common irregulars: hecho, dicho, visto, vuelto, puesto, escrito, abierto, muerto.",
-    pluscuamperfecto:   "Past perfect: haber (imperfect) + past participle. Same as the present perfect but with había/habías/había…",
-    futuro_perifrastico:"Periphrastic future: ir (present) + a + infinitive. Equivalent to 'going to' in English. Very common in spoken Spanish.",
-    imperativo:         "Affirmative imperative: tú → 3rd person present (-ar: habla, -er: come, -ir: vive). Nosotros/ellos = present subjunctive. Vosotros: -ar/-er/-ir → -ad/-ed/-id. Irregular tú forms: di, haz, ve, pon, sal, sé, ten, ven.",
+    perfecto:              "Present perfect: haber (present) + past participle. Participle: -ar → -ado, -er/-ir → -ido. Common irregulars: hecho, dicho, visto, vuelto, puesto, escrito, abierto, muerto.",
+    pluscuamperfecto:      "Past perfect: haber (imperfect) + past participle. Same as the present perfect but with había/habías/había…",
+    futuro_perifrastico:   "Periphrastic future: ir (present) + a + infinitive. Equivalent to 'going to' in English. Very common in spoken Spanish.",
+    futuro_perfecto:       "Future perfect: haber (future) + past participle. Habré/habrás/habrá/habremos/habréis/habrán + participle. Expresses an action completed before a future point.",
+    condicional_compuesto: "Conditional perfect: haber (conditional) + past participle. Habría/habrías/habría/habríamos/habríais/habrían + participle. Expresses an unreal or hypothetical past action.",
+    gerundio:              "Gerund: -ar → stem + -ando; -er/-ir → stem + -iendo. If stem ends in a vowel: -yendo (leyendo, oyendo). Stem changes: e→i (pidiendo, diciendo), o→u (durmiendo, pudiendo).",
+    imperativo:            "Affirmative imperative: tú → 3rd person present (-ar: habla, -er: come, -ir: vive). Nosotros/ellos = present subjunctive. Vosotros: -ar/-er/-ir → -ad/-ed/-id. Irregular tú forms: di, haz, ve, pon, sal, sé, ten, ven.",
     fullyIrr:           "Fully irregular verb — all forms must be memorised.",
     goYo:               "Irregular -go form only in the 1st person (yo). All other persons follow the regular pattern.",
     zco:                "Verbs ending in -cer/-cir: yo → -zco. All other persons are regular.",
@@ -128,10 +153,13 @@ const RULES = {
     },
   },
   pt: {
-    perfecto:           "Pretérito perfeito composto: haber (presente) + particípio passado. Particípio: -ar → -ado, -er/-ir → -ido. Irregulares comuns: hecho, dicho, visto, vuelto, puesto, escrito, abierto, muerto.",
-    pluscuamperfecto:   "Mais-que-perfeito: haber (imperfeito) + particípio passado. Mesma formação que o perfeito mas com había/habías/había…",
-    futuro_perifrastico:"Futuro perifrástico: ir (presente) + a + infinitivo. Equivalente a 'ir + infinitivo' em português. Muito comum na fala.",
-    imperativo:         "Imperativo afirmativo: tú → 3.ª pessoa do presente (-ar: habla, -er: come, -ir: vive). Nosotros/ellos = presente do conjuntivo. Vosotros: -ar/-er/-ir → -ad/-ed/-id. Formas irregulares de tú: di, haz, ve, pon, sal, sé, ten, ven.",
+    perfecto:              "Pretérito perfeito composto: haber (presente) + particípio passado. Particípio: -ar → -ado, -er/-ir → -ido. Irregulares comuns: hecho, dicho, visto, vuelto, puesto, escrito, abierto, muerto.",
+    pluscuamperfecto:      "Mais-que-perfeito: haber (imperfeito) + particípio passado. Mesma formação que o perfeito mas com había/habías/había…",
+    futuro_perifrastico:   "Futuro perifrástico: ir (presente) + a + infinitivo. Equivalente a 'ir + infinitivo' em português. Muito comum na fala.",
+    futuro_perfecto:       "Futuro perfeito: haber (futuro) + particípio passado. Habré/habrás/habrá/habremos/habréis/habrán + particípio. Exprime uma ação concluída antes de um momento futuro.",
+    condicional_compuesto: "Condicional composto: haber (condicional) + particípio passado. Habría/habrías/habría/habríamos/habríais/habrían + particípio. Exprime uma ação irreal ou hipotética passada.",
+    gerundio:              "Gerúndio: -ar → radical + -ando; -er/-ir → radical + -iendo. Se o radical terminar em vogal: -yendo (leyendo, oyendo). Alternâncias: e→i (pidiendo, diciendo), o→u (durmiendo, pudiendo).",
+    imperativo:            "Imperativo afirmativo: tú → 3.ª pessoa do presente (-ar: habla, -er: come, -ir: vive). Nosotros/ellos = presente do conjuntivo. Vosotros: -ar/-er/-ir → -ad/-ed/-id. Formas irregulares de tú: di, haz, ve, pon, sal, sé, ten, ven.",
     fullyIrr:           "Verbo completamente irregular — todas as formas devem ser memorizadas.",
     goYo:               "Irregular em -go apenas na 1.ª pessoa (yo). As outras pessoas seguem o padrão regular.",
     zco:                "Verbos em -cer/-cir: yo → -zco. Todas as outras pessoas são regulares.",
@@ -159,10 +187,13 @@ function getRule(verbName, tense, lang) {
   const R = RULES[lang] || RULES.fr;
   const isFullyIrr = ["ser","estar","ir","haber","dar","caber"].includes(verbName);
 
-  if (tense==="perfecto")            return R.perfecto;
-  if (tense==="pluscuamperfecto")    return R.pluscuamperfecto;
-  if (tense==="futuro_perifrastico") return R.futuro_perifrastico;
-  if (tense==="imperativo")          return R.imperativo;
+  if (tense==="perfecto")               return R.perfecto;
+  if (tense==="pluscuamperfecto")       return R.pluscuamperfecto;
+  if (tense==="futuro_perifrastico")    return R.futuro_perifrastico;
+  if (tense==="futuro_perfecto")        return R.futuro_perfecto;
+  if (tense==="condicional_compuesto")  return R.condicional_compuesto;
+  if (tense==="gerundio")               return R.gerundio;
+  if (tense==="imperativo")             return R.imperativo;
 
   if (!verb.irregular) return (R.regular[tense]||{})[verb.type] || "";
 
