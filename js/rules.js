@@ -56,6 +56,8 @@ const RULE_TEXT = {
     part_irr:        "Participe passé irrégulier : {form} (et non *{reg}).",
     perf:            "Passé composé : haber au présent ({aux}) + participe passé ({part}).",
     plusc:           "Plus-que-parfait : haber à l'imparfait ({aux}) + participe passé ({part}).",
+    fut_perf:        "Futur antérieur : haber au futur ({aux}) + participe passé ({part}).",
+    cond_perf:       "Conditionnel passé : haber au conditionnel ({aux}) + participe passé ({part}).",
     perif:           "Futur proche : ir au présent ({ir}) + a + infinitif ({inf}).",
   },
   en: {
@@ -110,6 +112,8 @@ const RULE_TEXT = {
     part_irr:        "Irregular past participle: {form} (not *{reg}).",
     perf:            "Present perfect: haber in the present ({aux}) + past participle ({part}).",
     plusc:           "Past perfect: haber in the imperfect ({aux}) + past participle ({part}).",
+    fut_perf:        "Future perfect: haber in the future ({aux}) + past participle ({part}).",
+    cond_perf:       "Conditional perfect: haber in the conditional ({aux}) + past participle ({part}).",
     perif:           "Near future: ir in the present ({ir}) + a + infinitive ({inf}).",
   },
   pt: {
@@ -164,6 +168,8 @@ const RULE_TEXT = {
     part_irr:        "Particípio passado irregular: {form} (e não *{reg}).",
     perf:            "Pretérito perfeito composto: haber no presente ({aux}) + particípio passado ({part}).",
     plusc:           "Mais-que-perfeito: haber no imperfeito ({aux}) + particípio passado ({part}).",
+    fut_perf:        "Futuro perfeito: haber no futuro ({aux}) + particípio passado ({part}).",
+    cond_perf:       "Condicional composto: haber no condicional ({aux}) + particípio passado ({part}).",
     perif:           "Futuro próximo: ir no presente ({ir}) + a + infinitivo ({inf}).",
   },
 };

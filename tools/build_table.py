@@ -45,7 +45,12 @@ PERSONS = ["yo", "tú", "él", "nosotros", "vosotros", "ellos"]
 SIMPLE = ["presente", "indefinido", "imperfecto", "futuro", "condicional",
           "subjuntivo", "subjuntivo_imperfecto", "imperativo"]
 SINGLE = ["gerundio", "participio"]
-COMPOUND = ["perfecto", "pluscuamperfecto", "futuro_perifrastico"]
+COMPOUND = ["perfecto", "pluscuamperfecto", "futuro_perfecto", "condicional_compuesto",
+            "futuro_perifrastico"]
+# Compound tense -> tense of haber it uses, and rule id.
+HABER_TENSE = {"perfecto": ("presente", "perf"), "pluscuamperfecto": ("imperfecto", "plusc"),
+               "futuro_perfecto": ("futuro", "fut_perf"),
+               "condicional_compuesto": ("condicional", "cond_perf")}
 
 VERBECC_MAP = {
     "presente": ("indicativo", "presente"),
@@ -415,8 +420,8 @@ def add_derived(table):
             "|".join(variants(c) + [se_form(v) for v in variants(c) if se_form(v) != v])
             for c in t["subjuntivo_imperfecto"]]
         part = t["participio"]
-        t["perfecto"] = [f"{first(h)} {part}" for h in haber["presente"]]
-        t["pluscuamperfecto"] = [f"{first(h)} {part}" for h in haber["imperfecto"]]
+        for tense, (aux, _) in HABER_TENSE.items():
+            t[tense] = [f"{first(h)} {part}" for h in haber[aux]]
         t["futuro_perifrastico"] = [f"{first(f)} a {verb}" for f in ir["presente"]]
 
 
@@ -720,9 +725,9 @@ def rule_participio(verb, p):
 def rule_compound(verb, tense, t, haber, ir):
     if tense == "futuro_perifrastico":
         return [R("perif", inf=verb, ir=forms_str(ir["presente"]))], True
-    aux = forms_str(haber["presente" if tense == "perfecto" else "imperfecto"])
+    aux_tense, rule_id = HABER_TENSE[tense]
     part = t["participio"]
-    rules = [R("perf" if tense == "perfecto" else "plusc", aux=aux, part=part)]
+    rules = [R(rule_id, aux=forms_str(haber[aux_tense]), part=part)]
     reg = regular_participle(verb)
     if part != reg:
         rules.append(R("part_irr", form=part, reg=reg))

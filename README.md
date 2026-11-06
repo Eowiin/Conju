@@ -5,7 +5,7 @@ A Spanish conjugation trainer for French, English, and Portuguese speakers. Runs
 ## Features
 
 - ~160 verbs (regular and irregular)
-- 11 tenses: present, preterite, imperfect, perfect, pluperfect, future, periphrastic future, conditional, present/imperfect subjunctive, imperative
+- 14 tenses: present, preterite, imperfect, perfect, pluperfect, future, periphrastic future, future perfect, conditional, conditional perfect, present/imperfect subjunctive, imperative, gerund
 - Every expected answer comes from a verified conjugation table (see below)
 - Accents and ñ count. An answer that is right except for accents gets a second try ("Almost: check the accents"); case and extra spaces are ignored
 - Alternative forms are accepted and shown ("Also accepted": -se imperfect subjunctive, RAE 2010 spellings such as *rio* / *rió*)
@@ -54,7 +54,7 @@ A cell (verb, tense, person) enters the table only when **two independent source
 
 If no pair of sources agrees, the build stops and lists the cells.
 
-Compound tenses and the periphrastic future are not read from any source: they are built from the verified participle and the verified forms of *haber* and *ir*. The -se imperfect subjunctive is derived from the -ra form and accepted as an alternative.
+Compound tenses (perfect, pluperfect, future perfect, conditional perfect) and the periphrastic future are not read from any source: they are built from the verified participle and the verified forms of *haber* and *ir*. The -se imperfect subjunctive is derived from the -ra form and accepted as an alternative.
 
 ### Overrides
 

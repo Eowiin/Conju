@@ -1,4 +1,4 @@
-const COMPOUND_TENSES = ["perfecto","pluscuamperfecto","futuro_perifrastico"];
+const COMPOUND_TENSES = ["perfecto","pluscuamperfecto","futuro_perifrastico","futuro_perfecto","condicional_compuesto","gerundio"];
 
 const App = (()=>{
   let score=0, total=0, streak=0, answered=false, retried=false, current=null, history=[];
