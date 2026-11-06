@@ -90,7 +90,7 @@ If the build stops on disagreeing cells, check the forms in a reference (RAE, a 
 
 ## Size and compression
 
-`js/conjugations.js` weighs about 450 KB (about 60 KB gzipped). Make sure nginx compresses JavaScript — `text/html` is the only type compressed by default:
+`js/conjugations.js` weighs about 530 KB (about 90 KB gzipped). Make sure nginx compresses JavaScript — `text/html` is the only type compressed by default:
 
 ```nginx
 gzip on;

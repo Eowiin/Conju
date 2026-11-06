@@ -24,9 +24,13 @@ Paste this in the config file:
 server {
     listen 80;
     listen [::]:80;
-    server_name conju.eowinstudio.com;
+    server_name conju.ethansaux.fr;
     root /var/www/conju;
     index index.html;
+
+    # Compress JS/CSS (js/conjugations.js is ~530 KB raw, ~90 KB gzipped).
+    gzip_types text/css application/javascript;
+    gzip_vary on;
 }
 ```
 
@@ -37,11 +41,11 @@ sudo nginx -t && sudo nginx -s reload
 
 # 6. Enable HTTPS
 sudo apt install certbot python3-certbot-nginx -y
-sudo certbot --nginx -d conju.eowinstudio.com
+sudo certbot --nginx -d conju.ethansaux.fr
 ```
 
 > **Before step 6**, make sure the DNS A record is set on Infomaniak:
-> Manager → Domains → eowinstudio.com → DNS zone → Add record
+> Manager → Domains → ethansaux.fr → DNS zone → Add record
 > Type: `A` | Name: `conju` | Value: `<your VPS IP>`
 > Wait a few minutes for propagation before running certbot.
 
