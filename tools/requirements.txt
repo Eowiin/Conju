@@ -1,0 +1,2 @@
+verbecc==2.0.3
+scikit-learn==1.7.2  # required by verbecc 2.0.3

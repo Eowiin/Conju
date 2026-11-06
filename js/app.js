@@ -1,7 +1,7 @@
 const COMPOUND_TENSES = ["perfecto","pluscuamperfecto","futuro_perifrastico"];
 
 const App = (()=>{
-  let score=0, total=0, streak=0, answered=false, current=null, history=[];
+  let score=0, total=0, streak=0, answered=false, retried=false, current=null, history=[];
   let lang = "fr";
 
   function L() { return I18N[lang]; }
@@ -20,6 +20,7 @@ const App = (()=>{
     document.getElementById("btn-next-label").textContent = l.newSentence;
     document.getElementById("btn-next").title = l.newSentenceTitle;
     document.getElementById("answer-input").placeholder = l.placeholder;
+    document.getElementById("accent-bar").setAttribute("aria-label", l.accentBar);
 
     const selTense = document.getElementById("sel-tense");
     selTense.querySelectorAll("option").forEach(opt => {
@@ -42,9 +43,9 @@ const App = (()=>{
     const fresh = pool.filter(t => !recent.includes(t.verb+"_"+t.pronoun));
     const candidates = fresh.length ? fresh : pool;
     const t = candidates[Math.floor(Math.random()*candidates.length)];
-    const form = conjugate(t.verb, t.pronoun, tense);
+    const forms = acceptedForms(t.verb, t.pronoun, tense);
     history.push(t.verb+"_"+t.pronoun);
-    current = { ...t, tense, form, conjugation:getFullConjugation(t.verb,tense) };
+    current = { ...t, tense, forms, form: forms[0], conjugation:getFullConjugation(t.verb,tense) };
   }
 
   function render() {
@@ -66,7 +67,7 @@ const App = (()=>{
     document.getElementById("btn-check").disabled=false;
     document.getElementById("feedback").style.display="none";
     document.getElementById("feedback").className="";
-    answered=false;
+    answered=false; retried=false;
     inp.focus();
   }
 
@@ -77,31 +78,49 @@ const App = (()=>{
     if (!current) return;
     const c = current;
     const l = L();
-    const userRaw = document.getElementById("answer-input").value.trim();
-    const ok = norm(userRaw)===norm(c.form);
+    const inp = document.getElementById("answer-input");
+    const fb = document.getElementById("feedback");
+    const userRaw = inp.value.trim();
+    const result = grade(userRaw, c.forms);
+
+    // Right except for accents: one more try, nothing counted yet.
+    if (result === "accents" && !retried) {
+      retried = true;
+      inp.className = "almost";
+      fb.className = "almost";
+      fb.innerHTML = `<div class="fb-title">${esc(l.almost)}</div>`;
+      fb.style.display = "block";
+      inp.focus();
+      return;
+    }
+
+    const ok = result === "correct";
     answered=true; total++;
     if (ok) { score++; streak++; } else { streak=0; }
     updateScore();
-    const inp = document.getElementById("answer-input");
     inp.className = ok?"correct":"wrong"; inp.readOnly=true;
     inp.focus();
 
-    const rule = getRule(c.verb, c.tense, lang);
+    const rule = getRule(c.verb, c.tense, c.pronoun, lang);
     let tableHtml = "";
     if (!COMPOUND_TENSES.includes(c.tense)) {
       tableHtml = '<div class="ct">' +
         c.conjugation.map(r=>{
-          const isTarget = norm(r.form)===norm(c.form);
+          const isTarget = r.pronoun===c.pronoun;
           return `<span class="cp">${esc(r.pronoun)}</span><span class="cf${isTarget?" hl":""}">${esc(r.form)}</span>`;
         }).join("") + "</div>";
     }
 
-    const fullSentence = c.pre+" <em>"+c.form+"</em> "+c.post;
-    const fb = document.getElementById("feedback");
+    const shown = ok ? normalizeAnswer(userRaw) : c.form;
+    const others = c.forms.filter(f => f !== shown);
+    const alsoHtml = c.forms.length > 1
+      ? `<div class="fb-also">${esc(l.alsoAccepted)} : <em>${others.map(esc).join(", ")}</em></div>`
+      : "";
+    const fullSentence = esc(c.pre)+" <em>"+esc(shown)+"</em> "+esc(c.post);
     fb.className = ok?"correct":"wrong";
     fb.innerHTML = ok
-      ? `<div class="fb-title">${l.correct}</div><div class="fb-answer">${fullSentence}</div><div class="fb-rule">${esc(rule)}${tableHtml}</div>`
-      : `<div class="fb-title">${l.wrong} <em>${esc(c.form)}</em></div><div class="fb-answer">${l.yourAnswer} : <em>${esc(userRaw||l.empty)}</em></div><div class="fb-rule">${esc(rule)}${tableHtml}</div>`;
+      ? `<div class="fb-title">${l.correct}</div><div class="fb-answer">${fullSentence}</div>${alsoHtml}<div class="fb-rule">${esc(rule)}${tableHtml}</div>`
+      : `<div class="fb-title">${l.wrong} <em>${esc(c.form)}</em></div><div class="fb-answer">${l.yourAnswer} : <em>${esc(userRaw||l.empty)}</em></div>${alsoHtml}<div class="fb-rule">${esc(rule)}${tableHtml}</div>`;
     fb.style.display="block";
     document.getElementById("btn-check").textContent = l.next;
   }
@@ -115,14 +134,29 @@ const App = (()=>{
 
   function resetScore(){score=0;total=0;streak=0;updateScore();}
 
-  function norm(s){return (s||"").toLowerCase().trim().normalize("NFD").replace(/[̀-ͯ]/g,"");}
   function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+
+  // Insert a letter at the cursor, replacing any selection.
+  function insertChar(ch) {
+    const inp = document.getElementById("answer-input");
+    if (inp.readOnly || inp.disabled) return;
+    const start = inp.selectionStart ?? inp.value.length;
+    const end = inp.selectionEnd ?? start;
+    inp.value = inp.value.slice(0, start) + ch + inp.value.slice(end);
+    inp.setSelectionRange(start + ch.length, start + ch.length);
+    inp.focus();
+  }
 
   function bindEvents() {
     document.getElementById("btn-reset").addEventListener("click", resetScore);
     document.getElementById("btn-next").addEventListener("click", next);
     document.getElementById("btn-check").addEventListener("click", check);
     document.getElementById("sel-tense").addEventListener("change", next);
+    document.querySelectorAll("#accent-bar button").forEach(btn => {
+      // Keep the focus (and the cursor position) in the answer field.
+      btn.addEventListener("mousedown", e => e.preventDefault());
+      btn.addEventListener("click", () => insertChar(btn.dataset.char));
+    });
     const dropdown = document.getElementById("lang-dropdown");
     document.getElementById("lang-current").addEventListener("click", e => {
       e.stopPropagation();
@@ -134,7 +168,6 @@ const App = (()=>{
         document.querySelectorAll(".lang-option").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         document.getElementById("lang-current").textContent = btn.textContent;
-        document.getElementById("lang-current").insertAdjacentHTML("beforeend", "");
         dropdown.classList.remove("open");
         applyLang();
       });

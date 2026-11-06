@@ -1,0 +1,70 @@
+{
+  "_doc": "Hand decisions for cells where no two sources agree, or where the agreed form must change. Key: verb/tense/person (one cell) or verb/tense (six cells, null for imperative yo; one string for gerundio/participio). 'a|b' lists accepted forms, the first one is authoritative. 'reason' is mandatory.",
+
+  "haber/presente": {
+    "forms": ["he", "has", "ha|hay", "hemos", "habéis", "han"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand. 'hay' is the impersonal form of the 3rd person singular."
+  },
+  "haber/indefinido": {
+    "forms": ["hube", "hubiste", "hubo", "hubimos", "hubisteis", "hubieron"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand (matches verbecc)."
+  },
+  "haber/imperfecto": {
+    "forms": ["había", "habías", "había", "habíamos", "habíais", "habían"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand (matches verbecc)."
+  },
+  "haber/futuro": {
+    "forms": ["habré", "habrás", "habrá", "habremos", "habréis", "habrán"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand (matches verbecc)."
+  },
+  "haber/condicional": {
+    "forms": ["habría", "habrías", "habría", "habríamos", "habríais", "habrían"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand (matches verbecc)."
+  },
+  "haber/subjuntivo": {
+    "forms": ["haya", "hayas", "haya", "hayamos", "hayáis", "hayan"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand (matches verbecc)."
+  },
+  "haber/subjuntivo_imperfecto": {
+    "forms": ["hubiera", "hubieras", "hubiera", "hubiéramos", "hubierais", "hubieran"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand (matches verbecc). The -se forms are added by the build."
+  },
+  "haber/imperativo": {
+    "forms": [null, "he", "haya", "hayamos", "habed", "hayan"],
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand. Tú imperative is 'he' (RAE), verbecc writes 'hé' with an accent a monosyllable does not take."
+  },
+  "haber/gerundio": {
+    "forms": "habiendo",
+    "reason": "haber is missing from Jehle and has no model verb; entered by hand (matches verbecc)."
+  },
+
+  "valer/imperativo/tú": {
+    "forms": "vale",
+    "reason": "verbecc gives the archaic 'val'; current usage (RAE) is 'vale', as in Jehle."
+  },
+  "obtener/imperativo/tú": {
+    "forms": "obtén",
+    "reason": "verbecc drops the written accent ('obten'); compounds of tener take one: obtén (Jehle)."
+  },
+  "contener/imperativo/tú": {
+    "forms": "contén",
+    "reason": "verbecc drops the written accent ('conten'); compounds of tener take one: contén (Jehle)."
+  },
+
+  "huir/indefinido/yo": {
+    "forms": "hui|huí",
+    "reason": "RAE 2010 spelling: 'hui' is a monosyllable and takes no accent; the older 'huí' (given by both verbecc and Jehle) is still accepted."
+  },
+  "huir/presente/vosotros": {
+    "forms": "huis|huís",
+    "reason": "RAE 2010 spelling: 'huis' is a monosyllable and takes no accent; the older 'huís' (given by both verbecc and Jehle) is still accepted."
+  },
+  "reír/indefinido/él": {
+    "forms": "rio|rió",
+    "reason": "RAE 2010 spelling: 'rio' is a monosyllable and takes no accent (Jehle); the older 'rió' (verbecc) is still accepted."
+  },
+  "reír/subjuntivo/vosotros": {
+    "forms": "riais|riáis",
+    "reason": "RAE 2010 spelling: 'riais' is a monosyllable and takes no accent; the older 'riáis' (given by both verbecc and Jehle) is still accepted."
+  }
+}

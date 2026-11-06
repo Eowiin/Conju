@@ -1,4 +1,4 @@
-:root{--bg:#f5f2eb;--surface:#fffef9;--border:#e2ddd4;--text:#1a1814;--muted:#7a7568;--accent:#c84b2f;--al:#fdf0ec;--ad:#9c3420;--green:#2d6a4f;--gl:#edf7f2;--gb:#a8d5c0;--red:#c0392b;--rl:#fdf0ee;--rb:#f0c4be;--r:12px;--rs:7px}
+:root{--orange:#b45f06;--ol:#fff4e5;--ob:#f3cf9b;--bg:#f5f2eb;--surface:#fffef9;--border:#e2ddd4;--text:#1a1814;--muted:#7a7568;--accent:#c84b2f;--al:#fdf0ec;--ad:#9c3420;--green:#2d6a4f;--gl:#edf7f2;--gb:#a8d5c0;--red:#c0392b;--rl:#fdf0ee;--rb:#f0c4be;--r:12px;--rs:7px}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem 4rem}
 header{text-align:center;margin-bottom:2.5rem;animation:fu .5s ease both}
@@ -39,7 +39,10 @@ input[type=text]{flex:1;padding:12px 16px;font-size:16px;font-family:'DM Sans',s
 input[type=text]:focus{border-color:var(--accent)}
 input[type=text].correct{border-color:var(--green);background:var(--gl)}
 input[type=text].wrong{border-color:var(--red);background:var(--rl)}
+input[type=text].almost{border-color:var(--orange);background:var(--ol)}
 input[type=text]:disabled{opacity:.6}
+.accent-bar{display:flex;gap:6px;flex-wrap:wrap;margin:-.5rem 0 1rem}
+.accent-bar button{font-size:15px;padding:5px 0;width:36px;text-align:center}
 button{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:10px 18px;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:background .15s,border-color .15s,transform .1s;white-space:nowrap}
 button:hover{background:var(--bg);border-color:#c8c3ba}
 button:active{transform:scale(.97)}
@@ -49,6 +52,10 @@ button:disabled{opacity:.5;cursor:not-allowed;transform:none}
 #feedback{border-radius:var(--rs);padding:1rem 1.25rem;margin-bottom:1rem;display:none;animation:fu .3s ease both}
 #feedback.correct{background:var(--gl);border:1px solid var(--gb)}
 #feedback.wrong{background:var(--rl);border:1px solid var(--rb)}
+#feedback.almost{background:var(--ol);border:1px solid var(--ob)}
+#feedback.almost .fb-title{color:var(--orange);margin-bottom:0}
+.fb-also{font-size:13px;margin-bottom:8px;color:var(--muted)}
+.fb-also em{font-style:italic;color:var(--text)}
 .fb-title{font-weight:500;font-size:15px;margin-bottom:6px}
 #feedback.correct .fb-title{color:var(--green)}
 #feedback.wrong .fb-title{color:var(--red)}

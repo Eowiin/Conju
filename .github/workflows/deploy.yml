@@ -10,10 +10,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check conjugation table
+        run: node tests/check.js
+
       - name: Deploy via rsync
         uses: burnett01/rsync-deployments@v8
         with:
-          switches: -az --delete --exclude='.git*' --exclude='DEPLOYMENT.md'
+          switches: -az --delete --exclude='.git*' --exclude='DEPLOYMENT.md' --exclude='tools/' --exclude='tests/' --exclude='data/'
           path: ./
           remote_path: ${{ secrets.VPS_PATH }}
           remote_host: ${{ secrets.VPS_HOST }}

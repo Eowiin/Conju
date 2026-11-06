@@ -18,6 +18,9 @@ const I18N = {
     wrong:          "✗ La bonne réponse est",
     yourAnswer:     "Ta réponse",
     empty:          "(vide)",
+    almost:         "Presque : vérifie les accents",
+    alsoAccepted:   "Aussi admis",
+    accentBar:      "Lettres accentuées",
     tenses: {
       presente:             "Présent de l'indicatif",
       indefinido:           "Prétérit indéfini",
@@ -51,6 +54,9 @@ const I18N = {
     wrong:          "✗ The correct answer is",
     yourAnswer:     "Your answer",
     empty:          "(empty)",
+    almost:         "Almost: check the accents",
+    alsoAccepted:   "Also accepted",
+    accentBar:      "Accented letters",
     tenses: {
       presente:             "Present indicative",
       indefinido:           "Simple past (preterite)",
@@ -84,6 +90,9 @@ const I18N = {
     wrong:          "✗ A resposta correta é",
     yourAnswer:     "A sua resposta",
     empty:          "(vazio)",
+    almost:         "Quase: verifica os acentos",
+    alsoAccepted:   "Também aceite",
+    accentBar:      "Letras acentuadas",
     tenses: {
       presente:             "Presente do indicativo",
       indefinido:           "Pretérito indefinido",
